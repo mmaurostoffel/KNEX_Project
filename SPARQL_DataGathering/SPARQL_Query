@@ -1,0 +1,66 @@
+SELECT ?main ?mainLabel ?type ?typeLabel
+
+WHERE
+
+{
+  #present in work Warhammer 40000 == Viele verschiedene Outputs
+  {?main wdt:P1441 wd:Q209026.}
+  UNION
+  #present in work Warhammer == Viele verschiedene Outputs
+  {?main wdt:P1441 wd:Q928197}
+  UNION
+  #from narrative universe == Viele verschiedene Outputs
+  {?main wdt:P1080 wd:Q19595297.}
+
+
+  #Typ der Outputs
+  #Alle
+  ?main wdt:P31 ?type.
+
+
+  ### Rassen ###
+  #Nur character race wd:Q2607197 == Necrons, Eldar, Dark Eldar
+  #?main wdt:P31 wd:Q2607197.
+  #Nur fictional humanoid species == Tau (4x)
+  #?main wdt:P31 wd:Q24286894.
+  #Nur 	character class == Ork (2x)
+  #?main wdt:P31 wd:Q1062990.
+  # fictional interstellar state == Imperium of Man (2x) und Tau (4x)
+  #?main wdt:P31 wd:Q47537235.
+  # Nur warhammer race  = Jokaero
+  #?main wdt:P31 wd:Q20667393.
+ #Nur fictional humanoid !Gefährlich, da er Charaktergruppen und Charactere beinhaltet!
+  #?main wdt:P31 wd:Q28020127.
+
+
+  ### Charaktere ###
+  #Nur fictional character = Roboute Guilliman (2x), Rogal Dorn (2x), Q3721226 (Eldrad_Ulthran), Q3027554
+  #?main wdt:P31 wd:Q95074.
+  #Nur fictional human = Q2820140, Horus (2x), Sly Marbo
+  #?main wdt:P31 wd:Q15632617.
+
+
+  ### Locations ###
+  #fictional interstellar state
+  #?main wdt:P31 wd:Q47537235.
+  #fictional planet
+  #?main wdt:P31 wd:Q2775969
+  #fictional lake
+  #?main wdt:P31 wd:Q15709969
+  #fictional mountain range
+  #?main wdt:P31 wd:Q58325316
+  #fictional city
+  #?main wdt:P31 wd:Q1964689
+  #fictional country
+  #?main wdt:P31 wd:Q1145276
+
+
+  ### Others ###
+  #fictional organization
+  #?main wdt:P31 wd:Q14623646.
+  #fictional military organization
+  #?main wdt:P31 wd:Q18011141.
+  #fictional spacecraft
+  #?main wdt:P31 wd:Q14637321
+
+  SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en". }}
