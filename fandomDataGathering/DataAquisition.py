@@ -29,6 +29,6 @@ def split_xml_by_page(file_path, output_folder):
 
 
 # Usage example
-file_path = '../dok/warhammer40k_pages_current.xml'
+file_path = '../dok/old/warhammer40k_pages_current.xml'
 output_folder = '../dok/splitFiles'
 split_xml_by_page(file_path, output_folder)

@@ -1,0 +1,53 @@
+#### Vorgehen:
+# Im File "SPARQL_Query_mit_Details" ist zu sehen, dass sehr viele unterschiedliche Klassennamen für
+# ähnliche Klassen verwendet wurden.
+# Zudem gibt es drei Root Klassen (wd:Q209026, wd:Q928197, wd:Q19595297), welche unterschiedliche Resultate liefern
+# Eine Unterscuhung hat gezeigt, dass es Überlappungen bei den Klassen gibt, aber keine alleine alle Inhalte besitzt
+# Daher wurde als Top Layer Query die Union der drei Root Klassen gewählt
+
+
+
+SELECT DISTINCT ?main ?mainLabel #?type ?typeLabel
+
+WHERE
+
+{
+  # 1 present in work Warhammer 40000 == Viele verschiedene Outputs
+  {?main wdt:P1441 wd:Q209026.}
+  UNION
+  # 2 present in work Warhammer == Viele verschiedene Outputs
+  {?main wdt:P1441 wd:Q928197.}
+  UNION
+  # 3 from narrative universe == Viele verschiedene Outputs
+  {?main wdt:P1080 wd:Q19595297.}
+
+  ?main wdt:P31 ?type.
+
+  SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en". }}
+
+
+
+
+Angepasster Query für RDFLib
+
+    PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+    PREFIX wd: <http://www.wikidata.org/entity/>
+    PREFIX wikibase: <http://wikiba.se/ontology#>
+    PREFIX bd: <http://www.bigdata.com/rdf#>
+    SELECT DISTINCT ?main ?mainLabel #?type ?typeLabel
+    WHERE{
+        SERVICE <https://query.wikidata.org/sparql>{
+          # 1 present in work Warhammer 40000 == Viele verschiedene Outputs
+          {?main wdt:P1441 wd:Q209026.}
+          UNION
+          # 2 present in work Warhammer == Viele verschiedene Outputs
+          {?main wdt:P1441 wd:Q928197.}
+          UNION
+          # 3 from_narrative universe == Viele verschiedene Outputs
+          {?main wdt:P1080 wd:Q19595297.}
+
+          ?main wdt:P31 ?type.
+          ?main rdfs:label ?mainLabel filter (lang(?mainLabel) = "en").
+        }
+
+        SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en". }}
