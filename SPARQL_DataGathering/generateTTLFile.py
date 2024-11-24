@@ -40,6 +40,6 @@ def getBaseData():
         g.add((type, RDFS.label, typeLabel))
 
 
-    g.serialize('../dok/base.ttl', format='ttl')
+    g.serialize('../results/base.ttl', format='ttl')
 
 getBaseData()

@@ -1,0 +1,260 @@
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix wdt: <http://www.wikidata.org/prop/direct/> .
+
+<http://www.wikidata.org/entity/Q1065243> rdfs:label "Ork"@en ;
+    wdt:P31 <http://www.wikidata.org/entity/Q1062990> .
+
+<http://www.wikidata.org/entity/Q107976420> rdfs:label "Archaon, Lord of the End Times"@en ;
+    wdt:P31 <http://www.wikidata.org/entity/Q15632617> .
+
+<http://www.wikidata.org/entity/Q1110525> rdfs:label "Inquisition"@en ;
+    wdt:P31 <http://www.wikidata.org/entity/Q14623646> .
+
+<http://www.wikidata.org/entity/Q1142268> rdfs:label "Emperor of Mankind"@en ;
+    wdt:P31 <http://www.wikidata.org/entity/Q17624054>,
+        <http://www.wikidata.org/entity/Q3410216>,
+        <http://www.wikidata.org/entity/Q7643449> .
+
+<http://www.wikidata.org/entity/Q115532827> rdfs:label "Nagash"@en ;
+    wdt:P31 <http://www.wikidata.org/entity/Q3335069> .
+
+<http://www.wikidata.org/entity/Q125407664> rdfs:label "Adeptus Astra Telepathica"@en ;
+    wdt:P31 <http://www.wikidata.org/entity/Q14623646> .
+
+<http://www.wikidata.org/entity/Q129492119> rdfs:label "Age of Strife"@en ;
+    wdt:P31 <http://www.wikidata.org/entity/Q18230293> .
+
+<http://www.wikidata.org/entity/Q129497939> rdfs:label "Thunder Warriors"@en ;
+    wdt:P31 <http://www.wikidata.org/entity/Q28020127> .
+
+<http://www.wikidata.org/entity/Q129506120> rdfs:label "Ultramarines"@en ;
+    wdt:P31 <http://www.wikidata.org/entity/Q28020127> .
+
+<http://www.wikidata.org/entity/Q129797536> rdfs:label "Imperial Cult"@en ;
+    wdt:P31 <http://www.wikidata.org/entity/Q17364638> .
+
+<http://www.wikidata.org/entity/Q13581464> rdfs:label "Ordo Malleus"@en ;
+    wdt:P31 <http://www.wikidata.org/entity/Q14623646> .
+
+<http://www.wikidata.org/entity/Q16622539> rdfs:label "Vlad von Carstein"@en ;
+    wdt:P31 <http://www.wikidata.org/entity/Q1569167>,
+        <http://www.wikidata.org/entity/Q2990982>,
+        <http://www.wikidata.org/entity/Q30061417> .
+
+<http://www.wikidata.org/entity/Q17429473> rdfs:label "Ungrim Ironfist"@en ;
+    wdt:P31 <http://www.wikidata.org/entity/Q10477881> .
+
+<http://www.wikidata.org/entity/Q1853364> rdfs:label "Black Water"@en ;
+    wdt:P31 <http://www.wikidata.org/entity/Q15709969> .
+
+<http://www.wikidata.org/entity/Q20986877> rdfs:label "Valaya"@en ;
+    wdt:P31 <http://www.wikidata.org/entity/Q17624054> .
+
+<http://www.wikidata.org/entity/Q2246201> rdfs:label "Chaos Dwarfs"@en ;
+    wdt:P31 <http://www.wikidata.org/entity/Q20667393> .
+
+<http://www.wikidata.org/entity/Q2261643> rdfs:label "Sisters of Battle"@en ;
+    wdt:P31 <http://www.wikidata.org/entity/Q14514600>,
+        <http://www.wikidata.org/entity/Q18011141> .
+
+<http://www.wikidata.org/entity/Q2290246> rdfs:label "Karak Norn"@en ;
+    wdt:P31 <http://www.wikidata.org/entity/Q1964689> .
+
+<http://www.wikidata.org/entity/Q2325089> rdfs:label "Lustria"@en ;
+    wdt:P31 <http://www.wikidata.org/entity/Q1145276> .
+
+<http://www.wikidata.org/entity/Q2340558> rdfs:label "Astra Militarum"@en ;
+    wdt:P31 <http://www.wikidata.org/entity/Q18011141> .
+
+<http://www.wikidata.org/entity/Q2353174> rdfs:label "Bretonnia"@en ;
+    wdt:P31 <http://www.wikidata.org/entity/Q1145276> .
+
+<http://www.wikidata.org/entity/Q2444998> rdfs:label "Chaos Space Marines"@en ;
+    wdt:P31 <http://www.wikidata.org/entity/Q18011141> .
+
+<http://www.wikidata.org/entity/Q2466320> rdfs:label "Karaz-a-Karak"@en ;
+    wdt:P31 <http://www.wikidata.org/entity/Q1964689> .
+
+<http://www.wikidata.org/entity/Q2524999> rdfs:label "Dark Eldar"@en ;
+    wdt:P31 <http://www.wikidata.org/entity/Q2607197> .
+
+<http://www.wikidata.org/entity/Q2626618> rdfs:label "Tau"@en ;
+    wdt:P31 <http://www.wikidata.org/entity/Q24286894>,
+        <http://www.wikidata.org/entity/Q47537235> .
+
+<http://www.wikidata.org/entity/Q2699186> rdfs:label "Karak Kadrin"@en ;
+    wdt:P31 <http://www.wikidata.org/entity/Q1964689> .
+
+<http://www.wikidata.org/entity/Q2824315> rdfs:label "Adeptus Mechanicus"@en ;
+    wdt:P31 <http://www.wikidata.org/entity/Q14623646> .
+
+<http://www.wikidata.org/entity/Q3000691> rdfs:label "Barak Varr"@en ;
+    wdt:P31 <http://www.wikidata.org/entity/Q1964689> .
+
+<http://www.wikidata.org/entity/Q3016217> rdfs:label "Lion El'Jonson"@en ;
+    wdt:P31 <http://www.wikidata.org/entity/Q1744949> .
+
+<http://www.wikidata.org/entity/Q3139746> rdfs:label "Lizardmen"@en ;
+    wdt:P31 <http://www.wikidata.org/entity/Q20667393> .
+
+<http://www.wikidata.org/entity/Q3140876> rdfs:label "Horus"@en ;
+    wdt:P31 <http://www.wikidata.org/entity/Q15632617>,
+        <http://www.wikidata.org/entity/Q1744949> .
+
+<http://www.wikidata.org/entity/Q3149420> rdfs:label "Rogal Dorn"@en ;
+    wdt:P31 <http://www.wikidata.org/entity/Q95074> .
+
+<http://www.wikidata.org/entity/Q3276946> rdfs:label "Winds of Magic"@en ;
+    wdt:P31 <http://www.wikidata.org/entity/Q6730974> .
+
+<http://www.wikidata.org/entity/Q3349824> rdfs:label "ogre (Warhammer Fantasy Battle)"@en ;
+    wdt:P31 <http://www.wikidata.org/entity/Q2590445> .
+
+<http://www.wikidata.org/entity/Q3548091> rdfs:label "Roboute Guilliman"@en ;
+    wdt:P31 <http://www.wikidata.org/entity/Q95074> .
+
+<http://www.wikidata.org/entity/Q3613748> rdfs:label "Amazons"@en ;
+    wdt:P31 <http://www.wikidata.org/entity/Q15831596> .
+
+<http://www.wikidata.org/entity/Q3637127> rdfs:label "Be'lakor"@en ;
+    wdt:P31 <http://www.wikidata.org/entity/Q34315358> .
+
+<http://www.wikidata.org/entity/Q3718468> rdfs:label "Adeptus Ministorum"@en ;
+    wdt:P31 <http://www.wikidata.org/entity/Q14623646> .
+
+<http://www.wikidata.org/entity/Q3773466> rdfs:label "Gorbad Ironclaw"@en ;
+    wdt:P31 <http://www.wikidata.org/entity/Q30318016> .
+
+<http://www.wikidata.org/entity/Q3776801> rdfs:label "Grimgor Ironhide"@en ;
+    wdt:P31 <http://www.wikidata.org/entity/Q30318016> .
+
+<http://www.wikidata.org/entity/Q3776893> rdfs:label "Grom the Paunch"@en ;
+    wdt:P31 <http://www.wikidata.org/entity/Q5575572> .
+
+<http://www.wikidata.org/entity/Q3814975> rdfs:label "Khazrak One-Eye"@en ;
+    wdt:P31 <http://www.wikidata.org/entity/Q28020127> .
+
+<http://www.wikidata.org/entity/Q3855063> rdfs:label "Dogs of War"@en ;
+    wdt:P31 <http://www.wikidata.org/entity/Q24577840> .
+
+<http://www.wikidata.org/entity/Q3950187> rdfs:label "Saphery"@en ;
+    wdt:P31 <http://www.wikidata.org/entity/Q1145276> .
+
+<http://www.wikidata.org/entity/Q3967463> rdfs:label "Squig"@en ;
+    wdt:P31 <http://www.wikidata.org/entity/Q3542731> .
+
+<http://www.wikidata.org/entity/Q4001231> rdfs:label "Tyrion"@en ;
+    wdt:P31 <http://www.wikidata.org/entity/Q3050815> .
+
+<http://www.wikidata.org/entity/Q4160381> rdfs:label "Jokaero"@en ;
+    wdt:P31 <http://www.wikidata.org/entity/Q20667393> .
+
+<http://www.wikidata.org/entity/Q519337> rdfs:label "Imperium of Man"@en ;
+    wdt:P31 <http://www.wikidata.org/entity/Q47537235> .
+
+<http://www.wikidata.org/entity/Q52153976> rdfs:label "Sly Marbo"@en ;
+    wdt:P31 <http://www.wikidata.org/entity/Q15632617> .
+
+<http://www.wikidata.org/entity/Q523760> rdfs:label "Skaven"@en ;
+    wdt:P31 <http://www.wikidata.org/entity/Q20667393> .
+
+<http://www.wikidata.org/entity/Q5614975> rdfs:label "Karak Izor"@en ;
+    wdt:P31 <http://www.wikidata.org/entity/Q1964689> .
+
+<http://www.wikidata.org/entity/Q64876312> rdfs:label "Sanguinius"@en ;
+    wdt:P31 <http://www.wikidata.org/entity/Q1744949> .
+
+<http://www.wikidata.org/entity/Q661873> rdfs:label "Necrons"@en ;
+    wdt:P31 <http://www.wikidata.org/entity/Q2607197> .
+
+<http://www.wikidata.org/entity/Q7279020> rdfs:label "Races and nations of Warhammer Fantasy"@en ;
+    wdt:P31 <http://www.wikidata.org/entity/Q15831596> .
+
+<http://www.wikidata.org/entity/Q9161626> rdfs:label "Athel Loren"@en ;
+    wdt:P31 <http://www.wikidata.org/entity/Q1145276>,
+        <http://www.wikidata.org/entity/Q16363493> .
+
+<http://www.wikidata.org/entity/Q988665> rdfs:label "Eldar"@en ;
+    wdt:P31 <http://www.wikidata.org/entity/Q2607197> .
+
+<http://www.wikidata.org/entity/Q10477881> rdfs:label "dwarf in fantasy"@en .
+
+<http://www.wikidata.org/entity/Q1062990> rdfs:label "character class"@en .
+
+<http://www.wikidata.org/entity/Q109288756> rdfs:label "group of brothers"@en .
+
+<http://www.wikidata.org/entity/Q1569167> rdfs:label "video game character"@en .
+
+<http://www.wikidata.org/entity/Q15709969> rdfs:label "fictional lake"@en .
+
+<http://www.wikidata.org/entity/Q16363493> rdfs:label "fictional forest"@en .
+
+<http://www.wikidata.org/entity/Q17364638> rdfs:label "fictional religion"@en .
+
+<http://www.wikidata.org/entity/Q18230293> rdfs:label "fictional historical period"@en .
+
+<http://www.wikidata.org/entity/Q2590445> rdfs:label "fictional ethnic group"@en .
+
+<http://www.wikidata.org/entity/Q2990982> rdfs:label "Vampire Counts"@en ;
+    wdt:P31 <http://www.wikidata.org/entity/Q24286894> .
+
+<http://www.wikidata.org/entity/Q30061417> rdfs:label "vampire in a work of fiction"@en .
+
+<http://www.wikidata.org/entity/Q3050815> rdfs:label "elf in a work of fiction"@en .
+
+<http://www.wikidata.org/entity/Q3335069> rdfs:label "Undead"@en .
+
+<http://www.wikidata.org/entity/Q3410216> rdfs:label "Psyker"@en ;
+    wdt:P31 <http://www.wikidata.org/entity/Q24577840> .
+
+<http://www.wikidata.org/entity/Q34315358> rdfs:label "fictional demon"@en .
+
+<http://www.wikidata.org/entity/Q3542731> rdfs:label "fictional animal character"@en .
+
+<http://www.wikidata.org/entity/Q3658341> rdfs:label "literary character"@en .
+
+<http://www.wikidata.org/entity/Q5575572> rdfs:label "goblin in a work of fiction"@en .
+
+<http://www.wikidata.org/entity/Q6730974> rdfs:label "magic system"@en .
+
+<http://www.wikidata.org/entity/Q7643449> rdfs:label "superhuman"@en .
+
+<http://www.wikidata.org/entity/Q14514600> rdfs:label "group of fictional characters"@en .
+
+<http://www.wikidata.org/entity/Q17624054> rdfs:label "fictional deity"@en .
+
+<http://www.wikidata.org/entity/Q24286894> rdfs:label "fictional humanoid species"@en .
+
+<http://www.wikidata.org/entity/Q30318016> rdfs:label "orc in a work of fiction"@en .
+
+<http://www.wikidata.org/entity/Q47537235> rdfs:label "fictional interstellar state"@en .
+
+<http://www.wikidata.org/entity/Q95074> rdfs:label "fictional character"@en .
+
+<http://www.wikidata.org/entity/Q15632617> rdfs:label "fictional human"@en .
+
+<http://www.wikidata.org/entity/Q15831596> rdfs:label "class of fictional entities"@en .
+
+<http://www.wikidata.org/entity/Q1744949> rdfs:label "Primarch"@en ;
+    wdt:P31 <http://www.wikidata.org/entity/Q109288756>,
+        <http://www.wikidata.org/entity/Q14514600>,
+        <http://www.wikidata.org/entity/Q24577840>,
+        <http://www.wikidata.org/entity/Q3658341> .
+
+<http://www.wikidata.org/entity/Q18011141> rdfs:label "fictional military organization"@en .
+
+<http://www.wikidata.org/entity/Q24577840> rdfs:label "fictional group of characters"@en .
+
+<http://www.wikidata.org/entity/Q2607197> rdfs:label "character race"@en .
+
+<http://www.wikidata.org/entity/Q28020127> rdfs:label "fictional humanoid"@en .
+
+<http://www.wikidata.org/entity/Q1145276> rdfs:label "fictional country"@en .
+
+<http://www.wikidata.org/entity/Q20667393> rdfs:label "Warhammer race"@en ;
+    wdt:P31 <http://www.wikidata.org/entity/Q15831596> .
+
+<http://www.wikidata.org/entity/Q14623646> rdfs:label "fictional organization"@en .
+
+<http://www.wikidata.org/entity/Q1964689> rdfs:label "fictional city"@en .
+
