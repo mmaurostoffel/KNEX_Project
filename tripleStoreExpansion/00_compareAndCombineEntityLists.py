@@ -11,6 +11,7 @@ dfWiki = dfWiki.rename(columns={"entity": "Wiki_entity", "tag": "Wiki_tag"})
 print(dfWiki.head())
 
 merged = pd.merge(dfSpacy, dfWiki, on="clean_entities")
+merged = merged.dropna(subset=['clean_entities'])
 print(merged.head())
 
 merged.to_csv("../results/mergedEntityList.csv", index=False)
