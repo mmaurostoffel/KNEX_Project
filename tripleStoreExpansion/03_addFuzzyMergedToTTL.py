@@ -26,8 +26,8 @@ def mapTagToClass(tag):
 
 # Step 1: Create new Triplets
 dfMerged = pd.read_csv("../results/mergedEntityList.csv")
-dfWikiCopy = pd.read_csv("../dok/WikiEntityList_withoutBase.csv")
-dfSpacyCopy = pd.read_csv("../dok/fullSpacyEntityList.csv")
+#dfWikiCopy = pd.read_csv("../dok/WikiEntityList_withoutBase.csv")
+#dfSpacyCopy = pd.read_csv("../dok/fullSpacyEntityList.csv")
 
 g = Graph()
 baseURL = "www.fhgr.ch/master/KE/2024/"
@@ -37,7 +37,6 @@ g.bind("wdt", WDT)
 g.bind("wd", WD)
 
 for row in dfMerged.iterrows():
-    # row 1 = Wiki Entity, row 3 = Spacy Tag
     saved_Spacy_entity = row[1]['Spacy_entity']
     saved_Wiki_entity = row[1]['Wiki_entity']
     entity = row[1]['Wiki_entity']
@@ -49,13 +48,13 @@ for row in dfMerged.iterrows():
 
     if rdfClass != 'unknown':
         g.add((entity, WDT.P31, rdfClass))
-        dfWikiCopy.drop(dfWikiCopy[dfWikiCopy['entity'] == saved_Wiki_entity].index, inplace=True)
-        dfSpacyCopy.drop(dfSpacyCopy[dfSpacyCopy['entity'] == saved_Spacy_entity].index, inplace=True)
+        #dfWikiCopy.drop(dfWikiCopy[dfWikiCopy['entity'] == saved_Wiki_entity].index, inplace=True)
+        #dfSpacyCopy.drop(dfSpacyCopy[dfSpacyCopy['entity'] == saved_Spacy_entity].index, inplace=True)
 
 
-g.serialize('../results/merged.ttl', format='ttl')
+g.serialize('../results/fuzzyMerged.ttl', format='ttl')
 # Step 2: Remove new Additions from mergedEntityList
-print(dfWikiCopy)
-dfWikiCopy.to_csv("../dok/WikiEntityList_withoutMerged.csv", index=False)
-dfSpacyCopy.to_csv("../dok/fullSpacyEntityList_withoutMerged.csv", index=False)
+
+#dfWikiCopy.to_csv("../dok/WikiEntityList_withoutMerged.csv", index=False)
+#dfSpacyCopy.to_csv("../dok/fullSpacyEntityList_withoutMerged.csv", index=False)
 

@@ -18,10 +18,16 @@ print(df.head())
 #clean Entity names
 fullList_entity = []
 for index, row in df.iterrows():
-    matches = re.findall(r'\'(.*?)\'', row['named_entities'])
+    print(index)
+    clean = re.sub(r"\\", "", row["named_entities"])
+    clean = re.sub(r'"', "'", clean)
+    #matches = re.findall(r"'(.*?)'", clean)
+    matches = clean.split(', ')
     for match in matches:
+        match = re.sub(r"'", "", match)
+        match = re.sub(r"]", "", match)
+        match = re.sub(r"\[", "", match)
         fullList_entity.append(match)
-
 #create empty tag list
 fullList_Tag = "" * len(fullList_entity)
 

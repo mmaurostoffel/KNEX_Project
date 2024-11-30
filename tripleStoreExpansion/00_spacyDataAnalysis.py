@@ -17,11 +17,6 @@ def cleanEntities(text):
     # remove double whitespaces
     text = re.sub('  ', ' ', text)
 
-    #remove stopwords
-    stopword_list = nltk.corpus.stopwords.words('english')
-    tokenizer = ToktokTokenizer()
-    text = remove_stopwords_de(text, tokenizer, stopword_list)
-
     #remove leading '
     text = text.strip("'")
     text = text.strip()
@@ -43,21 +38,20 @@ for i in nList:
     except ValueError:
         boole = True
 
-
     if not boole:
         print("skipped")
     else:
         matches = re.findall(r'\((.*?)\)', i)
         for match in matches:
             split = match.split(",")
-            fullList_entity.append(split[0].strip())
+            fullList_entity.append(split[0].strip("'"))
             fullList_Tag.append(split[1].strip())
 
 
 data = pd.DataFrame({'entity': fullList_entity, 'tag': fullList_Tag}, columns=['entity', 'tag'])
 
 #keep only valid tags
-valid_tags = ["'PERSON'", "'NORP'", "'ORG'", "'LOC'", "'EVENT'"]
+valid_tags = ["'PERSON'", "'NORP'", "'ORG'", "'LOC'"]
 data = data[data['tag'].isin(valid_tags)]
 
 #clean Entity names

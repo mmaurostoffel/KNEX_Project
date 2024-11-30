@@ -12,6 +12,6 @@ print(dfWiki.head())
 
 merged = pd.merge(dfSpacy, dfWiki, on="clean_entities")
 merged = merged.dropna(subset=['clean_entities'])
-print(merged.head())
+print(merged)
 
 merged.to_csv("../results/mergedEntityList.csv", index=False)

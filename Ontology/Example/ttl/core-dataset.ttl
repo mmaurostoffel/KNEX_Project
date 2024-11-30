@@ -1,0 +1,10 @@
+@prefix dbr: <http://dbpedia.org/resource/>.
+@prefix foaf: <http://xmlns.com/foaf/0.1/>.
+@prefix myo: <httsp://www.fhgr.ch/kee/myo/v1/>.
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
+
+dbr:Stanley_Kubrick myo:directorOf dbr:Eyes_Wide_Shut .
+dbr:Stanley_Kubrick myo:marriedTo dbr:Christiane_Kubrick .
+dbr:Stanley_Kubrick myo:influenced dbr:Katsuhiro_Otomo .
+dbr:Stanley_Kubrick foaf:birthday "1928-07-26"^^xsd:date .
+dbr:Katsuhiro_Otomo myo:influenced dbr:Satoshi_Kon .
