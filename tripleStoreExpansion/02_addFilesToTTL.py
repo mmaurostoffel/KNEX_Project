@@ -8,7 +8,7 @@ print(df.head())
 fileBaseURL = 'https://warhammer40k.fandom.com/wiki/File:'
 
 g = Graph()
-baseURL = "www.fhgr.ch/master/KE/2024/"
+baseURL = "https://www.fhgr.ch/master/KE/2024/"
 WDT = Namespace("http://www.wikidata.org/prop/direct/")
 WD = Namespace("http://www.wikidata.org/entity/")
 DC = Namespace("http://purl.org/dc/elements/1.1/")

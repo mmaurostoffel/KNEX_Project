@@ -7,7 +7,7 @@ dfFandom = pd.read_csv("../dok/fandomDataCleaned.csv")
 print(dfFandom.head())
 
 g = Graph()
-baseURL = "www.fhgr.ch/master/KE/2024/"
+baseURL = "https://www.fhgr.ch/master/KE/2024/"
 WDT = Namespace("http://www.wikidata.org/prop/direct/")
 WD = Namespace("http://www.wikidata.org/entity/")
 g.bind("wdt", WDT)

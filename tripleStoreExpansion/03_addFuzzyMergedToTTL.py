@@ -30,7 +30,7 @@ dfMerged = pd.read_csv("../results/mergedEntityList.csv")
 #dfSpacyCopy = pd.read_csv("../dok/fullSpacyEntityList.csv")
 
 g = Graph()
-baseURL = "www.fhgr.ch/master/KE/2024/"
+baseURL = "https://www.fhgr.ch/master/KE/2024/"
 WDT = Namespace("http://www.wikidata.org/prop/direct/")
 WD = Namespace("http://www.wikidata.org/entity/")
 g.bind("wdt", WDT)

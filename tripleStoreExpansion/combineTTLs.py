@@ -1,5 +1,6 @@
 from rdflib import Graph
 
+
 g = Graph()
 g.parse('../results/base.ttl', format='turtle')
 g.parse('../results/files.ttl', format='turtle')

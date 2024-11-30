@@ -1,5 +1,7 @@
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix wdt: <http://www.wikidata.org/prop/direct/> .
+@base <https://www.fhgr.ch/master/KE/2024/> .
+
 
 <http://www.wikidata.org/entity/Q1065243> rdfs:label "Ork"@en ;
     wdt:P31 <http://www.wikidata.org/entity/Q1062990> .
