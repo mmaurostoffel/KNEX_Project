@@ -17,8 +17,10 @@ print(df.head())
 
 #clean Entity names
 fullList_entity = []
+titleList = []
 for index, row in df.iterrows():
     print(index)
+    title = row['title']
     clean = re.sub(r"\\", "", row["named_entities"])
     clean = re.sub(r'"', "'", clean)
     #matches = re.findall(r"'(.*?)'", clean)
@@ -28,6 +30,9 @@ for index, row in df.iterrows():
         match = re.sub(r"]", "", match)
         match = re.sub(r"\[", "", match)
         fullList_entity.append(match)
+        titleList.append(title)
+
+# Create fullWikiEntityList
 #create empty tag list
 fullList_Tag = "" * len(fullList_entity)
 
@@ -45,3 +50,9 @@ data = data.drop_duplicates(['clean_entities'])
 
 data.to_csv("../dok/fullWikiEntityList.csv", index=False)
 print(data)
+
+# Create relationsList
+relData = pd.DataFrame({'title': titleList, 'relatedTo': fullList_entity}, columns=['title', 'relatedTo'])
+relData = relData.drop_duplicates()
+relData.to_csv("../dok/relationList.csv", index=False)
+print(relData)

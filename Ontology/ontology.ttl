@@ -1,0 +1,79 @@
+@prefix dbr: <http://dbpedia.org/resource/> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/>.
+@prefix myo: <https://www.fhgr.ch/master/KE/2024/>.
+@prefix owl: <http://www.w3.org/2002/07/owl#>.
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
+@prefix wdt: <http://www.wikidata.org/prop/direct/>.
+@prefix wd: <http://www.wikidata.org/entity/>.
+
+
+########################
+### Class Definition ###
+########################
+
+# fictional Person
+wd:Q15632617 rdf:type rdfs:Class.
+# Warhammer race
+wd:Q20667393 rdf:type rdfs:Class.
+# Location in fictional work
+wd:Q15796005 rdf:type rdfs:Class.
+# Fictional Organisation
+wd:Q14623646 rdf:type rdfs:Class.
+
+
+#######################
+### Class Hierarchy ###
+#######################
+
+### Personen ###
+# fictional Character subclass of fictional Person
+wd:Q95074 rdfs:subClassOf wd:Q15632617.
+
+### Rassen ###
+# fictional humanoid species
+wd:Q24286894 rdfs:subClassOf wd:Q20667393.
+# fictional interstellar state
+wd:Q47537235 rdfs:subClassOf wd:Q20667393.
+# character class
+wd:Q1062990 rdfs:subClassOf wd:Q20667393.
+# character race
+wd:Q2607197 rdfs:subClassOf wd:Q20667393.
+
+### Locations ###
+# fictional interstellar state
+wd:Q47537235 rdfs:subClassOf wd:Q15796005.
+# fictional planet
+wd:Q2775969 rdfs:subClassOf wd:Q15796005.
+# fictional lake
+wd:Q15709969 rdfs:subClassOf wd:Q15796005.
+# fictional mountain range
+wd:Q58325316 rdfs:subClassOf wd:Q15796005.
+# fictional city
+wd:Q1964689 rdfs:subClassOf wd:Q15796005.
+# fictional country
+wd:Q1145276 rdfs:subClassOf wd:Q15796005.
+# fictional spacecraft
+wd:Q14637321 rdfs:subClassOf wd:Q15796005.
+
+### Organisations ###
+# fictional military organization
+wd:Q18011141 rdfs:subClassOf wd:Q14623646.
+
+
+#########################
+### Object Properties ###
+#########################
+
+myo:isOfRace rdf:type owl:ObjectProperty.
+myo:isOfRace rdfs:domain wd:Q15632617. # Fictional Person
+myo:isOfRace rdfs:range wd:Q20667393. # Warhammer Race
+
+myo:isPartOfOrganisation rdf:type owl:ObjectProperty.
+myo:isPartOfOrganisation rdfs:domain wd:Q15632617. # Fictional Person
+myo:isPartOfOrganisation rdfs:range wd:Q14623646. # Fictional Organisation
+
+wdt:P1165 rdf:type owl:ObjectProperty. # "home world" Property
+wdt:P1165 rdfs:domain wd:Q15632617. # Fictional Person
+wdt:P1165 rdfs:range wd:Q15796005. # Location in fictional work

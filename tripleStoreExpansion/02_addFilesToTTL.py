@@ -9,17 +9,18 @@ fileBaseURL = 'https://warhammer40k.fandom.com/wiki/File:'
 
 g = Graph()
 baseURL = "https://www.fhgr.ch/master/KE/2024/"
+MYO = Namespace("https://www.fhgr.ch/master/KE/2024/")
 WDT = Namespace("http://www.wikidata.org/prop/direct/")
 WD = Namespace("http://www.wikidata.org/entity/")
-DC = Namespace("http://purl.org/dc/elements/1.1/")
+SCHEMA = Namespace("http://schema.org/")
 g.bind("wdt", WDT)
 g.bind("wd", WD)
-g.bind("dc", DC)
+g.bind("schema", SCHEMA)
+g.bind("myo", MYO)
 
 for row in df.iterrows():
     entity = row[1]['title']
-    entity = urllib.parse.quote(baseURL + entity)
-    entity = URIRef(entity)
+    entity = MYO[urllib.parse.quote(entity)]
 
 
     files = row[1]['files']
@@ -38,5 +39,5 @@ for row in df.iterrows():
         else: pass
 
         # dc:related
-        g.add((entity, DC.related, fileUrl))
+        g.add((entity, SCHEMA.associatedMedia, fileUrl))
 g.serialize('../results/files.ttl', format='ttl')

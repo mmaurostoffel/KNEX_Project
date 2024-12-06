@@ -1,5 +1,5 @@
 import pandas as pd
-from rdflib import Graph, URIRef, Namespace
+from rdflib import Graph, URIRef, Namespace, RDFS, Literal
 import urllib.parse
 
 
@@ -31,23 +31,27 @@ dfSpacyCopy = pd.read_csv("../dok/fullSpacyEntityList.csv")
 
 g = Graph()
 baseURL = "https://www.fhgr.ch/master/KE/2024/"
+MYO = Namespace("https://www.fhgr.ch/master/KE/2024/")
 WDT = Namespace("http://www.wikidata.org/prop/direct/")
 WD = Namespace("http://www.wikidata.org/entity/")
 g.bind("wdt", WDT)
 g.bind("wd", WD)
+g.bind("myo", MYO)
 
 for row in dfMerged.iterrows():
     # row 1 = Wiki Entity, row 3 = Spacy Tag
     saved_Spacy_entity = row[1]['Spacy_entity']
     saved_Wiki_entity = row[1]['Wiki_entity']
-    entity = row[1]['Wiki_entity']
-    entity = urllib.parse.quote(baseURL + entity)
-    entity = URIRef(entity)
+    title = row[1]['Wiki_entity']
+    entity = MYO[urllib.parse.quote(title)]
 
     tag = row[1]['Spacy_tag']
     rdfClass = mapTagToClass(tag)
 
     if rdfClass != 'unknown':
+        # Add title of entity
+        g.add((entity, RDFS.label, Literal(title)))
+        # Add Class of entity
         g.add((entity, WDT.P31, rdfClass))
         dfWikiCopy.drop(dfWikiCopy[dfWikiCopy['entity'] == saved_Wiki_entity].index, inplace=True)
         dfSpacyCopy.drop(dfSpacyCopy[dfSpacyCopy['entity'] == saved_Spacy_entity].index, inplace=True)

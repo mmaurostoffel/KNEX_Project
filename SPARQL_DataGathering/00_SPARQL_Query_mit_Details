@@ -53,6 +53,8 @@ WHERE
   #?main wdt:P31 wd:Q1964689
   #fictional country
   #?main wdt:P31 wd:Q1145276
+  #fictional spacecraft
+  #?main wdt:P31 wd:Q14637321
 
 
   ### Others ###
@@ -60,7 +62,6 @@ WHERE
   #?main wdt:P31 wd:Q14623646.
   #fictional military organization
   #?main wdt:P31 wd:Q18011141.
-  #fictional spacecraft
-  #?main wdt:P31 wd:Q14637321
+
 
   SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en". }}

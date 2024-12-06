@@ -1,5 +1,5 @@
 import pandas as pd
-from rdflib import Graph, URIRef, Namespace
+from rdflib import Graph, URIRef, Namespace, RDFS, Literal
 import urllib.parse
 
 
@@ -10,7 +10,7 @@ def mapTagToClass(tag):
             # Location in a Fictional work Q15796005
             return WD.Q15796005
         case "'PERSON'":
-            #Fictional Person Q95074
+            #Fictional Person Q15632617
             return WD.Q15632617
         case "'NORP'":
             # NORP # Nationalities or religious or political groups Q20667393
@@ -25,36 +25,35 @@ def mapTagToClass(tag):
 
 
 # Step 1: Create new Triplets
-dfMerged = pd.read_csv("../results/mergedEntityList.csv")
+dfMerged = pd.read_csv("../results/mergedEntityList_fuzzy_filtered.csv")
 #dfWikiCopy = pd.read_csv("../dok/WikiEntityList_withoutBase.csv")
 #dfSpacyCopy = pd.read_csv("../dok/fullSpacyEntityList.csv")
 
 g = Graph()
 baseURL = "https://www.fhgr.ch/master/KE/2024/"
+MYO = Namespace("https://www.fhgr.ch/master/KE/2024/")
 WDT = Namespace("http://www.wikidata.org/prop/direct/")
 WD = Namespace("http://www.wikidata.org/entity/")
 g.bind("wdt", WDT)
 g.bind("wd", WD)
+g.bind("myo", MYO)
 
 for row in dfMerged.iterrows():
     saved_Spacy_entity = row[1]['Spacy_entity']
     saved_Wiki_entity = row[1]['Wiki_entity']
-    entity = row[1]['Wiki_entity']
-    entity = urllib.parse.quote(baseURL + entity)
-    entity = URIRef(entity)
+    title = row[1]['Wiki_entity']
+    entity = MYO[urllib.parse.quote(title)]
 
     tag = row[1]['Spacy_tag']
     rdfClass = mapTagToClass(tag)
 
     if rdfClass != 'unknown':
+        # Add title of entity
+        g.add((entity, RDFS.label, Literal(title)))
+        # Add Class of entity
         g.add((entity, WDT.P31, rdfClass))
-        #dfWikiCopy.drop(dfWikiCopy[dfWikiCopy['entity'] == saved_Wiki_entity].index, inplace=True)
-        #dfSpacyCopy.drop(dfSpacyCopy[dfSpacyCopy['entity'] == saved_Spacy_entity].index, inplace=True)
 
 
 g.serialize('../results/fuzzyMerged.ttl', format='ttl')
-# Step 2: Remove new Additions from mergedEntityList
 
-#dfWikiCopy.to_csv("../dok/WikiEntityList_withoutMerged.csv", index=False)
-#dfSpacyCopy.to_csv("../dok/fullSpacyEntityList_withoutMerged.csv", index=False)
 
