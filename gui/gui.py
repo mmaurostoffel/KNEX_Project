@@ -1,19 +1,24 @@
 import streamlit as st
-from rdflib import Graph, URIRef, Namespace
+from rdflib import Graph, URIRef, Namespace, RDFS, Literal
 from streamlit_agraph import agraph, Node, Edge, Config, TripleStore
 
 
 def generateLists(g):
     raceList, charList, orgList, locList = [],[],[],[]
 
-    for s, _, _ in g.triples((None, WDT.P31, WD.Q20667393)):
-        raceList.append(str(s))
-    for s, _, name in g.triples((None, WDT.P31, WD.Q15632617)):
-        charList.append(s)
-    for s, _, name in g.triples((None, WDT.P31, WD.Q14623646)):
-        orgList.append(s)
-    for s, _, name in g.triples((None, WDT.P31, WD.Q15796005)):
-        locList.append(s)
+    for s,_,o in g.triples((None, WDT.P31, None)):
+        label = next(g.triples(((URIRef(s), RDFS.label, None))), ('_', '_', 'unknown'))[2]
+        match(o):
+            case WD.Q20667393:
+                raceList.append(str(label))
+            case WD.Q15632617:
+                charList.append(str(label))
+            case WD.Q14623646:
+                orgList.append(str(label))
+            case WD.Q15796005:
+                locList.append(str(label))
+            case _:
+                continue
 
     return raceList, charList, orgList, locList
 
@@ -27,64 +32,50 @@ def returnList(selection, raceList, charList, orgList, locList):
             return orgList
         case 'Location':
             return locList
+
+def labelToURL(label):
+    url = next(g.triples((None, RDFS.label, Literal(label))), ('_', '_', 'unknown'))[0]
+    return url
+
 def createGraph(selection, g):
-    config = Config(height=600, width=760)
-    # Retrieve page URL
-    print(selection)
-    currPage =""
-    for _,_, page in g.triples((selection, WDT.P856, None)):
-        currPage = page
-        print("PAGE: ", str(page))
-        break
+    config = Config(height=400, width=700)
+    selLabel = next(g.triples((URIRef(selection), RDFS.label, None)), ('_','_','unknown'))[2]
 
     nodes, edges, seen_nodes = [], [], []
-    for related, _, _ in g.triples((None, WDT.P856, currPage)):
-        print("RELATED: ",str(related))
+    nodes.append(Node(id=str(selection), label=str(selLabel)))
+    for _, _, related in g.triples((URIRef(selection), DC.related, None)):
         if related not in seen_nodes:
-            nodes.append(Node(id=str(related)))
+            relLabel = next(g.triples((URIRef(related), RDFS.label, None)), ('_','_','unknown'))[2]
+            nodes.append(Node(id=str(related), label=str(relLabel)))
             seen_nodes.append(related)
-        edges.append(Edge(source=str(related), label="dc:related", target=str(currPage)))
+        edges.append(Edge(source=str(related), target=str(selection)))
 
 
     graphDetails = [nodes, edges, config]
     return graphDetails
 
 
-
-
-
 g = Graph()
-g.parse("results/fullTripleStore_expanded.ttl", format="turtle")
+g.parse("results/expandedFiltered.ttl", format="turtle")
 
 baseURL = "https://www.fhgr.ch/master/KE/2024/"
 WDT = Namespace("http://www.wikidata.org/prop/direct/")
 WD = Namespace("http://www.wikidata.org/entity/")
 DC = Namespace("http://purl.org/dc/elements/1.1/")
+MYO = Namespace("https://www.fhgr.ch/master/KE/2024/")
+SCHEMA = Namespace("http://schema.org/")
 g.bind("wdt", WDT)
 g.bind("wd", WD)
 g.bind("dc", DC)
+g.bind("schema", SCHEMA)
+g.bind("myo", MYO)
 
-g2 = Graph()
-nodeWithPage = []
-# Vorfiltern
-# alle Nodes mit Files auswählen
-for s, o, p in g.triples((None, WDT.P856, None)):
-    nodeWithPage.append(s)
-
-# Alle Inhalte aller Nodes mit Files in neuen TripleStore aufnehmen
-for s, o, p in g.triples((None, None, None)):
-    if s in nodeWithPage:
-        g2.add((s, o, p))
-
-# Overwrite g
-g = g2
 rL, cL, oL, lL = generateLists(g)
 
 
 st.text("Enzyclopeida of Warhammer 40k")
 typeDropdown = st.selectbox("Choose what you are looking for:", options= ["Race", "Character", "Organisation", "Location"], index=0)
 selection = st.selectbox("Choose...", options=returnList(typeDropdown, rL, cL, oL, lL), index=0)
-
-graphDetails = createGraph(selection, g)
-print(graphDetails)
+url = labelToURL(selection)
+graphDetails = createGraph(url, g)
 agraph(graphDetails[0], graphDetails[1], config=graphDetails[2])
