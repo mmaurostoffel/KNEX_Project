@@ -1,7 +1,11 @@
+import requests
+import json
+import re
 import streamlit as st
 from rdflib import Graph, URIRef, Namespace, RDFS, Literal
-from streamlit_agraph import agraph, Node, Edge, Config, TripleStore
+from streamlit_agraph import agraph, Node, Edge, Config
 
+STATIC_LOGO_PATH = "https://static.wikia.nocookie.net/warhammer40k/images/6/6e/Warhammer40k-9e-logo.png/revision/latest?cb=20200524130522"
 
 def generateLists(g):
     raceList, charList, orgList, locList = [],[],[],[]
@@ -37,8 +41,16 @@ def labelToURL(label):
     url = next(g.triples((None, RDFS.label, Literal(label))), ('_', '_', 'unknown'))[0]
     return url
 
+def urlToLabel(url):
+    label = next(g.triples((URIRef(url), RDFS.label, None)), ('_', '_', 'unknown'))[2]
+    return label
+
+def urlToLink(url):
+    label = next(g.triples((URIRef(url), WDT.P856, None)), ('_', '_', 'unknown'))[2]
+    return label
+
 def createGraph(selection, g):
-    config = Config(height=400, width=700)
+    config = Config(height=400, width=700, size =20, font={'color': 'white'},)
     selLabel = next(g.triples((URIRef(selection), RDFS.label, None)), ('_','_','unknown'))[2]
 
     nodes, edges, seen_nodes = [], [], []
@@ -53,6 +65,16 @@ def createGraph(selection, g):
 
     graphDetails = [nodes, edges, config]
     return graphDetails
+
+def getImageFromURL(url, size):
+    try:
+        imageURL = next(g.triples((URIRef(url), SCHEMA.associatedMedia, None)), ('_', '_', 'unknown'))[2]
+        response = requests.get(f"https://warhammer40k.fandom.com/wikia.php?controller=CuratedContent&method=getImage&title=File:{imageURL}")
+        imgURL = json.loads(response.content)['url']
+        imgURL = re.sub(r"(scale-to-width-down\/)(.*)", "scale-to-width-down/" + str(size), imgURL)
+    except:
+        imgURL = STATIC_LOGO_PATH
+    return imgURL
 
 
 g = Graph()
@@ -73,9 +95,43 @@ g.bind("myo", MYO)
 rL, cL, oL, lL = generateLists(g)
 
 
-st.text("Enzyclopeida of Warhammer 40k")
-typeDropdown = st.selectbox("Choose what you are looking for:", options= ["Race", "Character", "Organisation", "Location"], index=0)
-selection = st.selectbox("Choose...", options=returnList(typeDropdown, rL, cL, oL, lL), index=0)
+# Beginn Page
+if 'nodeClicked' not in st.session_state:
+    st.session_state['nodeClicked'] = ""
+
+
+#Sidebar Title + Logo
+st.sidebar.title("Encyclopedia of Warhammer 40k")
+left_co, cent_co,last_co = st.columns(3)
+with cent_co:
+    st.sidebar.image(STATIC_LOGO_PATH)
+
+# Sidebar Selectors
+typeDropdown = st.sidebar.selectbox("Choose what you are looking for:", options= ["Race", "Character", "Organisation", "Location"], index=0)
+selection = st.sidebar.selectbox("Choose...", options=returnList(typeDropdown, rL, cL, oL, lL), index=0)
 url = labelToURL(selection)
-graphDetails = createGraph(url, g)
-agraph(graphDetails[0], graphDetails[1], config=graphDetails[2])
+print("Session before if: ",str(st.session_state['nodeClicked']))
+if st.session_state['nodeClicked'] != "":
+    print("If triggered")
+    url = st.session_state['nodeClicked']
+    st.session_state['nodeClicked'] = ""
+imgURL = getImageFromURL(url, 200)
+
+
+#Image Information Panel
+col1, col2 = st.columns(2)
+with st.container():
+    with col1:
+        st.image(imgURL)
+    with col2:
+        st.subheader("Name: "+str(urlToLabel(url)))
+        st.markdown("Link to Warhammer Wiki: [link](%s)" % urlToLink(url))
+
+# Graph
+with st.container():
+    graphDetails = createGraph(url, g)
+    url = agraph(graphDetails[0], graphDetails[1], config=graphDetails[2])
+    if url:
+        print("URL Output nach klick: ", url)
+        st.session_state.nodeClicked = url
+        st.rerun()

@@ -1,5 +1,5 @@
 import pandas as pd
-from rdflib import Graph, URIRef, Namespace
+from rdflib import Graph, URIRef, Namespace, Literal
 import urllib.parse
 import re
 
@@ -34,10 +34,12 @@ for row in df.iterrows():
             out = re.findall('"([^"]*)"', file)
 
         if len(out) == 1:
-            file = urllib.parse.quote(out[0])
-            fileUrl = URIRef(fileBaseURL + file)
+            #file = urllib.parse.quote(out[0])
+            #fileUrl = URIRef(fileBaseURL + file)
+            file = out[0]
         else: pass
 
         # dc:related
-        g.add((entity, SCHEMA.associatedMedia, fileUrl))
+        #g.add((entity, SCHEMA.associatedMedia, fileUrl))
+        g.add((entity, SCHEMA.associatedMedia, Literal(file)))
 g.serialize('../results/files.ttl', format='ttl')
