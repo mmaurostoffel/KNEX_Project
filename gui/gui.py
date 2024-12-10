@@ -4,6 +4,7 @@ import re
 import streamlit as st
 from rdflib import Graph, URIRef, Namespace, RDFS, Literal
 from streamlit_agraph import agraph, Node, Edge, Config
+from streamlit_modal import Modal
 
 STATIC_LOGO_PATH = "https://static.wikia.nocookie.net/warhammer40k/images/6/6e/Warhammer40k-9e-logo.png/revision/latest?cb=20200524130522"
 
@@ -52,13 +53,17 @@ def urlToLink(url):
 def createGraph(selection, g):
     config = Config(height=400, width=700, size =20, font={'color': 'white'},)
     selLabel = next(g.triples((URIRef(selection), RDFS.label, None)), ('_','_','unknown'))[2]
+    imgURL = next(g.triples((URIRef(selection), SCHEMA.associatedMedia, None)), ('_', '_', 'unknown'))[2]
+    imgURL = getImageFromURL(imgURL, 200)
 
     nodes, edges, seen_nodes = [], [], []
-    nodes.append(Node(id=str(selection), label=str(selLabel)))
+    nodes.append(Node(id=str(selection), label=str(selLabel), shape='circularImage', imagePadding='10', image= imgURL))
     for _, _, related in g.triples((URIRef(selection), DC.related, None)):
         if related not in seen_nodes:
             relLabel = next(g.triples((URIRef(related), RDFS.label, None)), ('_','_','unknown'))[2]
-            nodes.append(Node(id=str(related), label=str(relLabel)))
+            imgURL = next(g.triples((URIRef(selection), SCHEMA.associatedMedia, None)), ('_', '_', 'unknown'))[2]
+            imgURL = getImageFromURL(imgURL, 200)
+            nodes.append(Node(id=str(related), label=str(relLabel), shape='circularImage', imagePadding='10', image= imgURL))
             seen_nodes.append(related)
         edges.append(Edge(source=str(related), target=str(selection)))
 
@@ -99,7 +104,6 @@ rL, cL, oL, lL = generateLists(g)
 if 'nodeClicked' not in st.session_state:
     st.session_state['nodeClicked'] = ""
 
-
 #Sidebar Title + Logo
 st.sidebar.title("Encyclopedia of Warhammer 40k")
 left_co, cent_co,last_co = st.columns(3)
@@ -107,8 +111,8 @@ with cent_co:
     st.sidebar.image(STATIC_LOGO_PATH)
 
 # Sidebar Selectors
-typeDropdown = st.sidebar.selectbox("Choose what you are looking for:", options= ["Race", "Character", "Organisation", "Location"], index=0)
-selection = st.sidebar.selectbox("Choose...", options=returnList(typeDropdown, rL, cL, oL, lL), index=0)
+typeDropdown = st.sidebar.selectbox("Class selector", options= ["Race", "Character", "Organisation", "Location"], index=0)
+selection = st.sidebar.selectbox("Item selector", options=returnList(typeDropdown, rL, cL, oL, lL), index=0)
 url = labelToURL(selection)
 print("Session before if: ",str(st.session_state['nodeClicked']))
 if st.session_state['nodeClicked'] != "":
@@ -117,6 +121,26 @@ if st.session_state['nodeClicked'] != "":
     st.session_state['nodeClicked'] = ""
 imgURL = getImageFromURL(url, 200)
 
+# Sidebar Modal
+modal = Modal("Information Panel", key="demo-modal")
+
+open_modal = st.sidebar.button("Info")
+if open_modal:
+    modal.open()
+
+if modal.is_open():
+    with modal.container():
+        st.markdown("""
+        # Navigation 
+        - Select a Topic to search for in the "Topic selector" on the left.
+        - Select a specific object you would like to anaylze in the "Item selector".
+
+        You can also search for items by directly clicking on a node in the graph.
+        
+        # Visualization
+        After selecting your item, on the main page you will see all the known information about the item. 
+        This includes a link to the base information onf the Warhammer 40k fandom wiki. 
+        """)
 
 #Image Information Panel
 col1, col2 = st.columns(2)

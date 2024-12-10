@@ -34,8 +34,6 @@ wd:Q95074 rdfs:subClassOf wd:Q15632617.
 ### Rassen ###
 # fictional humanoid species
 wd:Q24286894 rdfs:subClassOf wd:Q20667393.
-# fictional interstellar state
-wd:Q47537235 rdfs:subClassOf wd:Q20667393.
 # character class
 wd:Q1062990 rdfs:subClassOf wd:Q20667393.
 # character race
