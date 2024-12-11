@@ -6,8 +6,12 @@ from rdflib import Graph, URIRef, Namespace, RDFS, Literal
 from streamlit_agraph import agraph, Node, Edge, Config
 from streamlit_modal import Modal
 
-STATIC_LOGO_PATH = "https://static.wikia.nocookie.net/warhammer40k/images/6/6e/Warhammer40k-9e-logo.png/revision/latest?cb=20200524130522"
+from PIL import Image
+from io import BytesIO
+import io
 
+STATIC_LOGO_PATH = "https://static.wikia.nocookie.net/warhammer40k/images/6/6e/Warhammer40k-9e-logo.png/revision/latest?cb=20200524130522"
+STATIC_TEST_IMAGE = "http://marvel-force-chart.surge.sh/marvel_force_chart_img/top_captainmarvel.png"
 def generateLists(g):
     raceList, charList, orgList, locList = [],[],[],[]
 
@@ -52,18 +56,25 @@ def urlToLink(url):
 
 def createGraph(selection, g):
     config = Config(height=400, width=700, size =20, font={'color': 'white'},)
-    selLabel = next(g.triples((URIRef(selection), RDFS.label, None)), ('_','_','unknown'))[2]
-    imgURL = next(g.triples((URIRef(selection), SCHEMA.associatedMedia, None)), ('_', '_', 'unknown'))[2]
-    imgURL = getImageFromURL(imgURL, 200)
+    selLabel = urlToLabel(selection)
+
+    imgURL = getImageFromURL(selection, 200, outputAsImage = False)
+    print(imgURL)
 
     nodes, edges, seen_nodes = [], [], []
-    nodes.append(Node(id=str(selection), label=str(selLabel), shape='circularImage', imagePadding='10', image= imgURL))
+    #nodes.append(Node(id=str(selection), label=str(selLabel), shape='circularImage', imagePadding='10', image= imgURL))
+    #nodes.append(Node(id=str(selection), label=str(selLabel), shape='circularImage', imagePadding='10', image= STATIC_TEST_IMAGE))
+    nodes.append(Node(id=str(selection), label=str(selLabel)))
     for _, _, related in g.triples((URIRef(selection), DC.related, None)):
         if related not in seen_nodes:
-            relLabel = next(g.triples((URIRef(related), RDFS.label, None)), ('_','_','unknown'))[2]
-            imgURL = next(g.triples((URIRef(selection), SCHEMA.associatedMedia, None)), ('_', '_', 'unknown'))[2]
-            imgURL = getImageFromURL(imgURL, 200)
-            nodes.append(Node(id=str(related), label=str(relLabel), shape='circularImage', imagePadding='10', image= imgURL))
+            relLabel = urlToLabel(related)
+
+
+            imgURL = getImageFromURL(related, 200, outputAsImage = False)
+
+            #nodes.append(Node(id=str(related), label=str(relLabel), shape='circularImage', imagePadding='10', image= imgURL))
+            #nodes.append(Node(id=str(related), label=str(relLabel), shape='circularImage', imagePadding='10', image = STATIC_TEST_IMAGE))
+            nodes.append(Node(id=str(related), label=str(relLabel), font={'color': 'black', 'size': 20}, node={'color': 'black'}))
             seen_nodes.append(related)
         edges.append(Edge(source=str(related), target=str(selection)))
 
@@ -71,14 +82,18 @@ def createGraph(selection, g):
     graphDetails = [nodes, edges, config]
     return graphDetails
 
-def getImageFromURL(url, size):
+def getImageFromURL(url, size, outputAsImage = True):
     try:
         imageURL = next(g.triples((URIRef(url), SCHEMA.associatedMedia, None)), ('_', '_', 'unknown'))[2]
         response = requests.get(f"https://warhammer40k.fandom.com/wikia.php?controller=CuratedContent&method=getImage&title=File:{imageURL}")
         imgURL = json.loads(response.content)['url']
         imgURL = re.sub(r"(scale-to-width-down\/)(.*)", "scale-to-width-down/" + str(size), imgURL)
+        if outputAsImage:
+            imgURL = Image.open(requests.get(imgURL, stream=True).raw)
     except:
         imgURL = STATIC_LOGO_PATH
+        if outputAsImage:
+            imgURL = Image.open(requests.get(imgURL, stream=True).raw)
     return imgURL
 
 
@@ -108,7 +123,7 @@ if 'nodeClicked' not in st.session_state:
 st.sidebar.title("Encyclopedia of Warhammer 40k")
 left_co, cent_co,last_co = st.columns(3)
 with cent_co:
-    st.sidebar.image(STATIC_LOGO_PATH)
+    st.sidebar.image(getImageFromURL(STATIC_LOGO_PATH, 200))
 
 # Sidebar Selectors
 typeDropdown = st.sidebar.selectbox("Class selector", options= ["Race", "Character", "Organisation", "Location"], index=0)

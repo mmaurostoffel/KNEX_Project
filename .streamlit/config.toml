@@ -3,3 +3,9 @@
     backgroundColor="#a80001"
     secondaryBackgroundColor="#383e41"
     textColor="#f7f8f9"
+
+#[server]
+#    enableXsrfProtection=false
+
+
+
