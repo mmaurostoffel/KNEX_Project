@@ -5,13 +5,13 @@ import streamlit as st
 from rdflib import Graph, URIRef, Namespace, RDFS, Literal
 from streamlit_agraph import agraph, Node, Edge, Config
 from streamlit_modal import Modal
-
 from PIL import Image
-from io import BytesIO
-import io
+from streamlit_extras.stylable_container import stylable_container
 
 STATIC_LOGO_PATH = "https://static.wikia.nocookie.net/warhammer40k/images/6/6e/Warhammer40k-9e-logo.png/revision/latest?cb=20200524130522"
 STATIC_TEST_IMAGE = "http://marvel-force-chart.surge.sh/marvel_force_chart_img/top_captainmarvel.png"
+MAX_NODE_COUNT = 15
+
 def generateLists(g):
     raceList, charList, orgList, locList = [],[],[],[]
 
@@ -58,29 +58,32 @@ def createGraph(selection, g):
     config = Config(height=400, width=700, size =20, font={'color': 'white'},)
     selLabel = urlToLabel(selection)
 
-    imgURL = getImageFromURL(selection, 200, outputAsImage = False)
-    print(imgURL)
+    imgURL = getImageFromURL(selection, 300, outputAsImage = False)
+    #print(imgURL)
 
     nodes, edges, seen_nodes = [], [], []
     #nodes.append(Node(id=str(selection), label=str(selLabel), shape='circularImage', imagePadding='10', image= imgURL))
     #nodes.append(Node(id=str(selection), label=str(selLabel), shape='circularImage', imagePadding='10', image= STATIC_TEST_IMAGE))
-    nodes.append(Node(id=str(selection), label=str(selLabel)))
+    #nodes.append(Node(id=str(selection), label=str(selLabel), font={'color': 'black', 'size': 20}, node={'color': 'black'}))
+    count = 0
     for _, _, related in g.triples((URIRef(selection), DC.related, None)):
-        if related not in seen_nodes:
-            relLabel = urlToLabel(related)
+        count += 1
+        if count < MAX_NODE_COUNT:
+            if related not in seen_nodes:
+                relLabel = urlToLabel(related)
 
 
-            imgURL = getImageFromURL(related, 200, outputAsImage = False)
+                imgURL = getImageFromURL(related, 200, outputAsImage = False)
 
-            #nodes.append(Node(id=str(related), label=str(relLabel), shape='circularImage', imagePadding='10', image= imgURL))
-            #nodes.append(Node(id=str(related), label=str(relLabel), shape='circularImage', imagePadding='10', image = STATIC_TEST_IMAGE))
-            nodes.append(Node(id=str(related), label=str(relLabel), font={'color': 'black', 'size': 20}, node={'color': 'black'}))
-            seen_nodes.append(related)
-        edges.append(Edge(source=str(related), target=str(selection)))
-
+                #nodes.append(Node(id=str(related), label=str(relLabel), shape='circularImage', imagePadding='10', image= imgURL))
+                #nodes.append(Node(id=str(related), label=str(relLabel), shape='circularImage', imagePadding='10', image = STATIC_TEST_IMAGE))
+                nodes.append(Node(id=str(related), label=str(relLabel), font={'color': 'black', 'size': 20}, node={'color': 'black'}))
+                seen_nodes.append(related)
+            edges.append(Edge(source=str(related), target=str(selection)))
+    nodes.append(Node(id=str(selection), label=str(selLabel), font={'color': 'black', 'size': 20}, node={'color': 'black'}))
 
     graphDetails = [nodes, edges, config]
-    return graphDetails
+    return graphDetails, count
 
 def getImageFromURL(url, size, outputAsImage = True):
     try:
@@ -119,6 +122,9 @@ rL, cL, oL, lL = generateLists(g)
 if 'nodeClicked' not in st.session_state:
     st.session_state['nodeClicked'] = ""
 
+# Set Page to wide
+st.set_page_config(layout="wide")
+
 #Sidebar Title + Logo
 st.sidebar.title("Encyclopedia of Warhammer 40k")
 left_co, cent_co,last_co = st.columns(3)
@@ -126,14 +132,16 @@ with cent_co:
     st.sidebar.image(getImageFromURL(STATIC_LOGO_PATH, 200))
 
 # Sidebar Selectors
-typeDropdown = st.sidebar.selectbox("Class selector", options= ["Race", "Character", "Organisation", "Location"], index=0)
+typeDropdown = st.sidebar.selectbox("Class selector", options=["Race", "Character", "Organisation", "Location"],index=0)
 selection = st.sidebar.selectbox("Item selector", options=returnList(typeDropdown, rL, cL, oL, lL), index=0)
 url = labelToURL(selection)
-print("Session before if: ",str(st.session_state['nodeClicked']))
+
+# Check if url needs to be overridden
 if st.session_state['nodeClicked'] != "":
-    print("If triggered")
     url = st.session_state['nodeClicked']
     st.session_state['nodeClicked'] = ""
+
+
 imgURL = getImageFromURL(url, 200)
 
 # Sidebar Modal
@@ -158,19 +166,76 @@ if modal.is_open():
         """)
 
 #Image Information Panel
-col1, col2 = st.columns(2)
-with st.container():
-    with col1:
-        st.image(imgURL)
-    with col2:
-        st.subheader("Name: "+str(urlToLabel(url)))
-        st.markdown("Link to Warhammer Wiki: [link](%s)" % urlToLink(url))
+mainCol1, mainCol2 = st.columns([2, 1])
+with mainCol1:
+    col1, col2 = st.columns(2)
+    with st.container():
+        with col1:
+            st.image(imgURL)
+        with col2:
+            st.subheader("Name:")
+            st.header(""+str(urlToLabel(url)))
+            st.markdown("Link to Warhammer Wiki:")
+            st.markdown("[Link](%s)" % urlToLink(url))
 
-# Graph
-with st.container():
-    graphDetails = createGraph(url, g)
-    url = agraph(graphDetails[0], graphDetails[1], config=graphDetails[2])
-    if url:
-        print("URL Output nach klick: ", url)
-        st.session_state.nodeClicked = url
-        st.rerun()
+    # Graph
+    with st.container():
+        graphDetails, count = createGraph(url, g)
+        st.subheader(f"Displaying {min(MAX_NODE_COUNT, count)} of {count} nodes")
+        url = agraph(graphDetails[0], graphDetails[1], config=graphDetails[2])
+        if url:
+            #print("URL Output nach klick: ", url)
+            st.session_state.nodeClicked = url
+            st.rerun()
+with mainCol2:
+    with stylable_container(
+            key="container_with_border",
+            css_styles="""
+                {
+                    background-color: rgba(93, 4, 18, 1);
+                    border: 1px solid rgba(49, 51, 63, 0.2);
+                    border-radius: 0.5rem;
+                    padding: calc(1em - 1px)
+                }
+                """,
+    ):
+        st.subheader("Frequently searched")
+        with st.container():
+            st.subheader("Space Marines")
+            col11, col12 = st.columns(2)
+            url = labelToURL("Space Marines")
+            with col11:
+                st.image(getImageFromURL(url, 200))
+            with col12:
+                st.markdown("Link to Warhammer Wiki:")
+                st.markdown("[Link](%s)" % urlToLink(url))
+                if st.button("Search", key="spaceMarinesButton"):
+                    st.session_state.nodeClicked = url
+                    st.rerun()
+
+        with st.container():
+            st.subheader("Orks")
+            col11, col12 = st.columns(2)
+            url = labelToURL("Orks")
+            with col11:
+                st.image(getImageFromURL(url, 200))
+            with col12:
+                st.markdown("Link to Warhammer Wiki:")
+                st.markdown("[Link](%s)" % urlToLink(url))
+                if st.button("Search", key="orksButton"):
+                    st.session_state.nodeClicked = url
+                    st.rerun()
+
+        with st.container():
+            st.subheader("Chaos Cult")
+            col11, col12 = st.columns(2)
+            url = labelToURL("Chaos Cult")
+            with col11:
+                st.image(getImageFromURL(url, 200))
+            with col12:
+                st.markdown("Link to Warhammer Wiki:")
+                st.markdown("[Link](%s)" % urlToLink(url))
+                if st.button("Search", key="chaosCultButton"):
+                    st.session_state.nodeClicked = url
+                    st.rerun()
+
