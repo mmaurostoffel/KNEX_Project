@@ -77,10 +77,10 @@ def createGraph(selection, g):
 
                 #nodes.append(Node(id=str(related), label=str(relLabel), shape='circularImage', imagePadding='10', image= imgURL))
                 #nodes.append(Node(id=str(related), label=str(relLabel), shape='circularImage', imagePadding='10', image = STATIC_TEST_IMAGE))
-                nodes.append(Node(id=str(related), label=str(relLabel), font={'color': 'black', 'size': 20}, node={'color': 'black'}))
+                nodes.append(Node(id=str(related), label=str(relLabel), color='lightgray', font={'color': 'black', 'size': 20}))
                 seen_nodes.append(related)
             edges.append(Edge(source=str(related), target=str(selection)))
-    nodes.append(Node(id=str(selection), label=str(selLabel), font={'color': 'black', 'size': 20}, node={'color': 'black'}))
+    nodes.append(Node(id=str(selection), label=str(selLabel), color='lightgray', font={'color': 'black', 'size': 20}))
 
     graphDetails = [nodes, edges, config]
     return graphDetails, count
@@ -99,6 +99,8 @@ def getImageFromURL(url, size, outputAsImage = True):
             imgURL = Image.open(requests.get(imgURL, stream=True).raw)
     return imgURL
 
+def set_node_clicked(url):
+    st.session_state.nodeClicked = url
 
 g = Graph()
 g.parse("results/expandedFiltered.ttl", format="turtle")
@@ -117,6 +119,7 @@ g.bind("myo", MYO)
 
 rL, cL, oL, lL = generateLists(g)
 
+rerunCounter = 0
 
 # Beginn Page
 if 'nodeClicked' not in st.session_state:
@@ -127,7 +130,7 @@ st.set_page_config(layout="wide")
 
 #Sidebar Title + Logo
 st.sidebar.title("Encyclopedia of Warhammer 40k")
-left_co, cent_co,last_co = st.columns(3)
+left_co, cent_co, last_co = st.columns(3)
 with cent_co:
     st.sidebar.image(getImageFromURL(STATIC_LOGO_PATH, 200))
 
@@ -137,23 +140,20 @@ selection = st.sidebar.selectbox("Item selector", options=returnList(typeDropdow
 url = labelToURL(selection)
 
 # Check if url needs to be overridden
-if st.session_state['nodeClicked'] != "":
-    url = st.session_state['nodeClicked']
-    st.session_state['nodeClicked'] = ""
+#rerunCounter += 1
+#string = 'counter = ', rerunCounter, ' state = ', st.session_state['nodeClicked']
+#st.sidebar.markdown(string)
+
+if st.session_state.nodeClicked != "":
+    url = st.session_state.nodeClicked
+    st.session_state.nodeClicked = ""
 
 
 imgURL = getImageFromURL(url, 200)
 
-# Sidebar Modal
-modal = Modal("Information Panel", key="demo-modal")
-
-open_modal = st.sidebar.button("Info")
-if open_modal:
-    modal.open()
-
-if modal.is_open():
-    with modal.container():
-        st.markdown("""
+# Sidebar Expander
+with st.sidebar.expander("Info"):
+    st.markdown("""
         # Navigation 
         - Select a Topic to search for in the "Topic selector" on the left.
         - Select a specific object you would like to anaylze in the "Item selector".
@@ -165,7 +165,7 @@ if modal.is_open():
         This includes a link to the base information onf the Warhammer 40k fandom wiki. 
         """)
 
-#Image Information Panel
+# Image Information Panel
 mainCol1, mainCol2 = st.columns([2, 1])
 with mainCol1:
     col1, col2 = st.columns(2)
@@ -184,9 +184,9 @@ with mainCol1:
         st.subheader(f"Displaying {min(MAX_NODE_COUNT, count)} of {count} nodes")
         url = agraph(graphDetails[0], graphDetails[1], config=graphDetails[2])
         if url:
-            #print("URL Output nach klick: ", url)
-            st.session_state.nodeClicked = url
+            set_node_clicked(url)
             st.rerun()
+
 with mainCol2:
     with stylable_container(
             key="container_with_border",
@@ -209,9 +209,7 @@ with mainCol2:
             with col12:
                 st.markdown("Link to Warhammer Wiki:")
                 st.markdown("[Link](%s)" % urlToLink(url))
-                if st.button("Search", key="spaceMarinesButton"):
-                    st.session_state.nodeClicked = url
-                    st.rerun()
+                st.button("Search", key="spaceMarinesButton", on_click=set_node_clicked, args=(url,))
 
         with st.container():
             st.subheader("Orks")
@@ -222,9 +220,8 @@ with mainCol2:
             with col12:
                 st.markdown("Link to Warhammer Wiki:")
                 st.markdown("[Link](%s)" % urlToLink(url))
-                if st.button("Search", key="orksButton"):
-                    st.session_state.nodeClicked = url
-                    st.rerun()
+                st.button("Search", key="orksButton", on_click=set_node_clicked, args=(url,))
+
 
         with st.container():
             st.subheader("Chaos Cult")
@@ -235,7 +232,5 @@ with mainCol2:
             with col12:
                 st.markdown("Link to Warhammer Wiki:")
                 st.markdown("[Link](%s)" % urlToLink(url))
-                if st.button("Search", key="chaosCultButton"):
-                    st.session_state.nodeClicked = url
-                    st.rerun()
+                st.button("Search", key="chaosCultButton", on_click=set_node_clicked, args=(url,))
 
